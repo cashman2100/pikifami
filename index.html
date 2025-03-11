@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пики, Фамы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="player-section">
+            <h2>Игра "Пики, Фамы"</h2>
+            
+            <div class="all-sections">
+                <div class="left-section">
+                    <div class="white-box">
+                        <h3>Угадай слово</h3>
+                        <div class="word-row target-word">
+                            <div class="letter-inputs" data-type="target">
+                                <div class="letter-input" contenteditable="false"></div>
+                                <div class="letter-input" contenteditable="false"></div>
+                                <div class="letter-input" contenteditable="false"></div>
+                                <div class="letter-input" contenteditable="false"></div>
+                                <div class="letter-input" contenteditable="false"></div>
+                            </div>
+                            <button class="toggle-secret-word">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="guesses-list">
+                            <!-- сюда будут добавляться слова -->
+                        </div>
+                        
+                        <div class="word-row guess-input">
+                            <div class="row-number">1</div>
+                            <div class="letter-inputs" data-type="guess">
+                                <div class="letter-input" contenteditable="true"></div>
+                                <div class="letter-input" contenteditable="true"></div>
+                                <div class="letter-input" contenteditable="true"></div>
+                                <div class="letter-input" contenteditable="true"></div>
+                                <div class="letter-input" contenteditable="true"></div>
+                            </div>
+                            <button class="submit-guess">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="suggestions-button">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="suggestions-dropdown">
+                                <div class="suggestions-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-section">
+                    <div class="rules-section collapsible">
+                        <div class="section-header" onclick="toggleSection(this.parentElement)">
+                            <h3>Правила игры</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <p><strong>ЦЕЛЬ ИГРЫ</strong> - отгадать загаданное слово за минимальное количество попыток.</p>
+                            
+                            <p><strong>Как играть:</strong></p>
+                            <ul>
+                                <li>Вводите слова из 5 букв (буквы не должны повторяться)</li>
+                                <li>После каждого слова появляются числа:</li>
+                                <ul>
+                                    <li><span class="score-box pika">2</span> - количество букв на своих местах</li>
+                                    <li><span class="score-box fama">1</span> - количество букв, которые есть в слове, но на других местах</li>
+                                </ul>
+                                <li>Нажимайте на буквы для отметки их статуса:</li>
+                            </ul>
+
+                            <div class="status-examples">
+                                <div class="status-example">
+                                    <span class="letter pika">А</span> - буква на своём месте ("пика")
+                                </div>
+                                <div class="status-example">
+                                    <span class="letter fama">А</span> - буква есть в слове, но не на своём месте ("фама")
+                                </div>
+                                <div class="status-example">
+                                    <span class="letter x">А</span> - буквы нет в загаданном слове
+                                </div>
+                                <div class="status-example">
+                                    <span class="letter question">А</span> - статус буквы под вопросом
+                                </div>
+                                <div class="status-example">
+                                    <span class="letter">А</span> - статус буквы неизвестен
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alphabet-section collapsible">
+                        <div class="section-header" onclick="toggleSection(this.parentElement)">
+                            <h3>Использовано букв</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="vowels-row">
+                                <!-- гласные буквы -->
+                            </div>
+                            <div class="consonants-row">
+                                <!-- согласные буквы -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-section collapsible">
+                        <div class="section-header" onclick="toggleSection(this.parentElement)">
+                            <h3>ТОП-10 игроков</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="section-content">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Счет</th>
+                                        <th>Имя</th>
+                                        <th>Попыток</th>
+                                        <th>Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут добавляться динамически -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Всплывающее меню для выбора статуса буквы -->
+    <div class="letter-status-popup" style="display: none;">
+        <div class="status-options">
+            <div class="status-option" data-status="pika"></div>
+            <div class="status-option" data-status="fama"></div>
+            <div class="status-option" data-status="question"></div>
+            <div class="status-option" data-status="x"></div>
+            <div class="status-option" data-status=""></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
