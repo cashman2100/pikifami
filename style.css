@@ -1,0 +1,778 @@
+:root {
+    --primary-color: #2196F3;
+    --secondary-color: #FFC107;
+    --error-color: #F44336;
+    --success-color: #4CAF50;
+    --background-color: #F5F5F5;
+    --card-color: #FFFFFF;
+    --text-color: #333333;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.game-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.player-section {
+    flex: 1;
+    min-width: 45%;
+    max-width: 100%;
+    padding: 15px;
+}
+
+.player-card {
+    background: var(--card-color);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.player-section h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.word-row {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.letter-inputs {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.letter-input {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 40px;
+    cursor: text;
+    background: white;
+    caret-color: transparent;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    empty-cells: show;
+}
+
+.letter-input:empty::before {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 24px;
+    background: transparent;
+}
+
+.letter-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.letter-input:focus:empty::before {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 24px;
+    background: var(--primary-color);
+    animation: blink 1s infinite;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-guess {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 4px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.submit-guess:hover {
+    background-color: #1976D2;
+}
+
+.submit-guess i {
+    font-size: 18px;
+}
+
+.guess-row {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.guess-word {
+    display: flex;
+    margin-right: 10px;
+    gap: 4px;
+}
+
+.letter {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+.letter.pika {
+    background-color: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.letter.fama {
+    background-color: var(--secondary-color);
+    color: black;
+    border-color: var(--secondary-color);
+}
+
+.letter.x {
+    color: var(--error-color);
+    border-color: var(--error-color);
+}
+
+.letter.question {
+    color: #757575;
+    border-color: #757575;
+}
+
+.result {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+}
+
+.result-count {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pika-count {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.fama-count {
+    background-color: var(--secondary-color);
+    color: black;
+}
+
+/* Всплывающее меню для выбора статуса буквы */
+.letter-status-popup {
+    position: absolute;
+    display: none;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    width: 40px;
+}
+
+.status-options {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.status-option {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.status-option:last-child {
+    margin-bottom: 0;
+}
+
+/* Зеленая кнопка с галочкой */
+.status-option[data-status="pika"] {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+.status-option[data-status="pika"]::after {
+    content: '✓';
+}
+
+/* Желтая кнопка */
+.status-option[data-status="fama"] {
+    background-color: #FFC107;
+    border-color: #FFC107;
+}
+
+/* Синяя кнопка с вопросом */
+.status-option[data-status="question"] {
+    background-color: white;
+    border-color: #1976D2;
+    color: #1976D2;
+}
+
+.status-option[data-status="question"]::after {
+    content: '?';
+}
+
+/* Красная кнопка с крестиком */
+.status-option[data-status="x"] {
+    background-color: white;
+    border-color: #D32F2F;
+    color: #D32F2F;
+}
+
+.status-option[data-status="x"]::after {
+    content: 'X';
+}
+
+/* Серая кнопка */
+.status-option[data-status=""] {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+/* Эффект при наведении */
+.status-option:hover {
+    opacity: 0.8;
+}
+
+/* Обновляем стили для букв в соответствии с новым дизайном */
+.letter {
+    /* ... существующие стили ... */
+    background-color: #f5f5f5;  /* Светло-серый фон по умолчанию */
+}
+
+.letter.question {
+    background-color: white;
+    border: 2px solid #2196F3;
+    color: #2196F3;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Стили для кнопок */
+.refresh-secret {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--primary-color);
+    border-radius: 4px;
+}
+
+.refresh-secret:hover {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.start-game {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.start-game:hover {
+    background-color: #1976D2;
+}
+
+/* Стили для заблокированных инпутов */
+.letter-input[contenteditable="false"] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Добавляем стили для кнопки переключения */
+.toggle-word {
+    padding: 8px 16px;
+    background-color: var(--secondary-color);
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.toggle-word:hover {
+    background-color: #FFA000;
+}
+
+.get-word-button {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.get-word-button:hover {
+    background-color: #1976D2;
+}
+
+.get-word-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Стили для секции алфавита */
+.alphabet-section {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.alphabet-section h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.vowels-row,
+.consonants-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.letter-box {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    box-sizing: border-box;
+}
+
+/* Стили для статусов букв в алфавите */
+.letter-box.pika {
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+}
+
+.letter-box.fama {
+    background-color: #FFC107;
+    border: 2px solid #FFC107;
+}
+
+.letter-box.question {
+    border-color: #1976D2;
+    color: #1976D2;
+    background-color: #fff;
+}
+
+.letter-box.x {
+    background-color: white;
+    border: 2px solid #F44336;
+    color: #F44336;
+}
+
+/* Использованная буква */
+.letter-box.used {
+    background-color: #f0f0f0;
+    color: #ddd; /* Светло-серый цвет буквы */
+    border-color: #ddd;
+}
+
+.white-box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.row-number {
+    position: absolute;
+    left: 0;
+    width: 30px;
+    text-align: right;
+    font-weight: bold;
+    color: #666;
+    font-size: 16px;
+}
+
+/* Стили для красной кнопки X */
+.mark-all-x {
+    background-color: #D32F2F;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mark-all-x:hover {
+    background-color: #B71C1C;
+}
+
+.target-word {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-secret-word {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: 10px;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.toggle-secret-word:hover {
+    color: #333;
+}
+
+.toggle-secret-word i {
+    font-size: 20px;
+}
+
+.leaderboard-section {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Занимает всю ширину */
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.leaderboard-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.leaderboard-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.right-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.alphabet-section,
+.leaderboard-section {
+    width: 100%;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Анимация для новой записи в таблице рекордов */
+@keyframes highlightRow {
+    0% {
+        background-color: #4CAF50;
+        color: white;
+    }
+    70% {
+        background-color: #4CAF50;
+        color: white;
+    }
+    100% {
+        background-color: transparent;
+        color: inherit;
+    }
+}
+
+.leaderboard-table tr.new-record {
+    animation: highlightRow 3s ease-out forwards;
+}
+
+.leaderboard-table tr.new-record td {
+    color: inherit;
+}
+
+.rules-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.rules-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.rules-section p {
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+.rules-section ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.rules-section li {
+    margin: 5px 0;
+}
+
+.status-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.status-example {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-example .letter {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.score-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    margin-right: 5px;
+}
+
+.score-box.pika {
+    background-color: #4CAF50;
+}
+
+.score-box.fama {
+    background-color: #FFC107;
+    color: #333; /* Темный текст для желтого фона */
+}
+
+.collapsible .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.collapsible .section-header:hover {
+    opacity: 0.8;
+}
+
+.collapsible .section-header i {
+    transition: transform 0.3s ease;
+}
+
+.collapsible.collapsed .section-header i {
+    transform: rotate(-90deg);
+}
+
+.collapsible .section-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    max-height: 1000px; /* Достаточно большое значение для развернутого состояния */
+}
+
+.collapsible.collapsed .section-content {
+    max-height: 0;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+.all-sections {
+    display: flex;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.left-section {
+    flex: 1;
+    min-width: 45%;
+    max-width: 50%;
+}
+
+.right-section {
+    flex: 1;
+    min-width: 45%;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.white-box h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.alphabet-section .section-content {
+    margin-top: 10px;
+}
+
+.suggestions-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestions-button:hover {
+    background-color: #1976D2;
+}
+
+.suggestions-button i {
+    font-size: 18px;
+}
+
+.suggestions-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    max-height: 300px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    margin-top: 4px;
+}
+
+.suggestions-list {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+}
+
+.suggestions-dropdown.active {
+    display: block;
+}
