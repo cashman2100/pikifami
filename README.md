@@ -14,11 +14,4 @@
 - Таблица рекордов
 - Система подсказок
 
-## Установка и запуск
-1. Клонируйте репозиторий
-2. Откройте index.html в браузере
-
-## Технологии
-- HTML5
-- CSS3
-- JavaScript (vanilla) 
+![](https://github.com/cashman2100/pikifami/blob/main/pikifami_screen.jpg)
